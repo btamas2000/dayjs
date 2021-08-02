@@ -23,4 +23,10 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="WebSharper.DayJs.Helpers">
+      <HintPath>..\WebSharper.DayJs.Helpers\bin\Debug\netstandard2.0\WebSharper.DayJs.Helpers.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
