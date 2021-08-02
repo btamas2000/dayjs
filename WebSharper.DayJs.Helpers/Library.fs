@@ -142,6 +142,10 @@ module DayJsHelpers =
         inherit BaseResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/dayjs.min.js")
 
     [<Require(typeof<MainResource>)>]
+    type UTCResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/utc.min.js")
+
+    [<Require(typeof<MainResource>)>]
     type CustomParseFormatResource() =
         inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/customParseFormat.min.js")
 
@@ -188,3 +192,47 @@ module DayJsHelpers =
     [<Require(typeof<MainResource>)>]
     type MinMaxResource() =
         inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/minMax.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type DurationResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/duration.min.js")
+        
+    [<Require(typeof<MainResource>)>]
+    type RelativeTimeResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/relativeTime.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type CalendarResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/calendar.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type ToArrayResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/toArray.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type ToObjectResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/toObject.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type IsSameOrBeforeResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/isSameOrBefore.min.js")
+    
+    [<Require(typeof<MainResource>)>]
+    type IsSameOrAfterResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/isSameOrAfter.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type IsBetweenResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/isBetween.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type IsLeapYearResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/isLeapYear.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type TimeZoneResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/timezone.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type LocaleDataResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/localeData.min.js")
