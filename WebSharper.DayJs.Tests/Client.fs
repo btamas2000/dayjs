@@ -29,13 +29,13 @@ module Client =
             )
             .ObjectSupp(
                 let fromObj = FromStandardObject()
-                fromObj.Year <- 2010
-                fromObj.Month <- 3
-                fromObj.Day <- 5
-                fromObj.Hour <- 15
-                fromObj.Minute <- 10
-                fromObj.Second <- 3
-                fromObj.Millisecond <- 123
+                fromObj.Years <- 2010
+                fromObj.Months <- 3
+                fromObj.Date <- 5
+                fromObj.Hours <- 15
+                fromObj.Minutes <- 10
+                fromObj.Seconds <- 3
+                fromObj.Milliseconds <- 123
                 p [] [text ((DayJs(fromObj)).ToString())]
             )
             .Doc()

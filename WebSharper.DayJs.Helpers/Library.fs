@@ -3,7 +3,6 @@
 open WebSharper
 open WebSharper.Core.Resources
 open System
-open System.Reflection
 
 module DayJsHelpers =
 
@@ -147,5 +146,45 @@ module DayJsHelpers =
         inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/customParseFormat.min.js")
 
     [<Require(typeof<MainResource>)>]
-    type ObjectSupport() =
+    type ObjectSupportResource() =
         inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/objectSupport.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type ArraySupportResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/arraySupport.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type WeekdayResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/weekday.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type ISOWeekdayResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/isoWeek.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type DayOfYearResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/dayOfYear.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type WeekOfYearResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/weekOfYear.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type ISOWeekResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/isoWeek.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type QuarterOfYearResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/quarterOfYear.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type WeekYearResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/weekYear.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type ISOWeeksInYearResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/isoWeeksInYear.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type MinMaxResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/minMax.min.js")
