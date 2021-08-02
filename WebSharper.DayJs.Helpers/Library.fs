@@ -236,3 +236,39 @@ module DayJsHelpers =
     [<Require(typeof<MainResource>)>]
     type LocaleDataResource() =
         inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/localeData.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type AdvancedFormatResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/advancedFormat.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type BadMutableResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/badMutable.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type BuddhistEraResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/buddhistEra.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type DevHelperResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/devHelper.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type IsTodayResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/isToday.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type IsTomorrowResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/isTomorrow.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type IsYesterdayResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/isYesterday.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type PluralGetSetResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/pluralGetSet.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type UpdateLocaleResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/updateLocale.min.js")

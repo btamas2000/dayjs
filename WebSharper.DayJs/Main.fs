@@ -79,38 +79,6 @@ module Definition =
             "ExlExl", "'()'"
         ]
 
-    let StaticLocaleData =
-        Class "dayjs.localeDate"
-        |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
-        |> WithSourceName "StaticLocaleData"
-        |+> Static [
-            Constructor T<unit>
-        ]
-        |+> Instance [
-            "firstDayOfWeek" => T<unit> ^-> !| T<string>
-            "months" => !? TSelf ^-> !| T<string>
-            "monthsShort" => !? TSelf ^-> !| T<string>
-            "weekdays" => !? TSelf ^-> !| T<string>
-            "weekdaysShort" => !? TSelf ^-> !| T<string>
-            "weekdaysMin" => !? TSelf ^-> !| T<string>
-        ]
-
-    let InstanceLocaleData =
-        Class "dayjs().localeDate"
-        |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
-        |> WithSourceName "InstanceLocaleData"
-        |+> Static [
-            Constructor T<unit>
-        ]
-        |+> Instance [
-            "firstDayOfWeek" => T<unit> ^-> !| T<string>
-            "months" => T<unit> ^-> !| T<string>
-            "monthsShort" => T<unit> ^-> !| T<string>
-            "weekdays" => T<unit> ^-> !| T<string>
-            "weekdaysShort" => T<unit> ^-> !| T<string>
-            "weekdaysMin" => T<unit> ^-> !| T<string>
-        ]
-
     let DayJs =
         Class "dayjs"
         |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.MainResource>]
@@ -142,21 +110,23 @@ module Definition =
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
             "firstDayOfWeek" => T<unit> ^-> !| T<string>
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
-            "months" => !? TSelf ^-> !| T<string>
+            "months" => TSelf ^-> !| T<string>
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
-            "monthsShort" => !? TSelf ^-> !| T<string>
+            "monthsShort" => TSelf ^-> !| T<string>
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
-            "weekdays" => !? TSelf ^-> !| T<string>
+            "weekdays" => TSelf ^-> !| T<string>
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
-            "weekdaysShort" => !? TSelf ^-> !| T<string>
+            "weekdaysShort" => TSelf ^-> !| T<string>
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
-            "weekdaysMin" => !? TSelf ^-> !| T<string>
+            "weekdaysMin" => TSelf ^-> !| T<string>
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
             "tz" => T<string> * T<string> ^-> TSelf
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.TimeZoneResource>]
             "tz" => T<string> * T<string> * T<string> ^-> TSelf
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.TimeZoneResource>]
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.CustomParseFormatResource>]
+            "updateLocale" => T<string> * T<obj> ^-> TSelf
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.UpdateLocaleResource>]
         ]
         |+> Instance [
             "isValid" => T<unit> ^-> T<bool>
@@ -164,16 +134,40 @@ module Definition =
             // get set
             "millisecond" => T<unit> ^-> T<int>
             "millisecond" => T<int> ^-> T<unit>
+            "milliseconds" => T<unit> ^-> T<int>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.PluralGetSetResource>]
+            "milliseconds" => T<int> ^-> T<unit>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.PluralGetSetResource>]
             "second" => T<unit> ^-> T<int>
             "second" => T<int> ^-> T<unit>
+            "seconds" => T<unit> ^-> T<int>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.PluralGetSetResource>]
+            "seconds" => T<int> ^-> T<unit>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.PluralGetSetResource>]
             "minute" => T<unit> ^-> T<int>
             "minute" => T<int> ^-> T<unit>
+            "minutes" => T<unit> ^-> T<int>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.PluralGetSetResource>]
+            "minutes" => T<int> ^-> T<unit>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.PluralGetSetResource>]
             "hour" => T<unit> ^-> T<int>
             "hour" => T<int> ^-> T<unit>
+            "hours" => T<unit> ^-> T<int>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.PluralGetSetResource>]
+            "hours" => T<int> ^-> T<unit>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.PluralGetSetResource>]
             "date" => T<unit> ^-> T<int>
             "date" => T<int> ^-> T<unit>
+            "dates" => T<unit> ^-> T<int>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.PluralGetSetResource>]
+            "dates" => T<int> ^-> T<unit>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.PluralGetSetResource>]
             "day" => T<unit> ^-> T<int>
             "day" => T<int> ^-> T<unit>
+            "days" => T<unit> ^-> T<int>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.PluralGetSetResource>]
+            "days" => T<int> ^-> T<unit>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.PluralGetSetResource>]
             "weekday" => T<unit> ^-> T<int>
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.WeekdayResource>]
             "weekday" => T<int> ^-> T<unit>
@@ -190,18 +184,44 @@ module Definition =
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.WeekOfYearResource>]
             "week" => T<int> ^-> T<unit>
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.WeekOfYearResource>]
+            "weeks" => T<unit> ^-> T<int>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.WeekOfYearResource>]
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.PluralGetSetResource>]
+            "weeks" => T<int> ^-> T<unit>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.WeekOfYearResource>]
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.PluralGetSetResource>]
             "isoWeek" => T<unit> ^-> T<int>
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.ISOWeekResource>]
             "isoWeek" => T<int> ^-> T<unit>
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.ISOWeekResource>]
+            "isoWeeks" => T<unit> ^-> T<int>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.ISOWeekResource>]
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.PluralGetSetResource>]
+            "isoWeeks" => T<int> ^-> T<unit>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.ISOWeekResource>]
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.PluralGetSetResource>]
             "month" => T<unit> ^-> T<int>
             "month" => T<int> ^-> T<unit>
+            "months" => T<unit> ^-> T<int>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.PluralGetSetResource>]
+            "months" => T<int> ^-> T<unit>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.PluralGetSetResource>]
             "quarter" => T<unit> ^-> T<int>
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.QuarterOfYearResource>]
             "quarter" => T<int> ^-> T<unit>
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.QuarterOfYearResource>]
+            "quarters" => T<unit> ^-> T<int>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.QuarterOfYearResource>]
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.PluralGetSetResource>]
+            "quarters" => T<int> ^-> T<unit>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.QuarterOfYearResource>]
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.PluralGetSetResource>]
             "year" => T<unit> ^-> T<int>
             "year" => T<int> ^-> T<unit>
+            "years" => T<unit> ^-> T<int>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.PluralGetSetResource>]
+            "years" => T<int> ^-> T<unit>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.PluralGetSetResource>]
             "weekYear" => T<unit> ^-> T<int>
             "isoWeekYear" => T<unit> ^-> T<int>
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.ISOWeekResource>]
@@ -255,12 +275,18 @@ module Definition =
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.IsBetweenResource>]
             "isLeapYear" => T<unit> ^-> T<bool>
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.IsLeapYearResource>]
+            "isToday" => T<unit> ^-> T<bool>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.IsTodayResource>]
+            "isTomorrow" => T<unit> ^-> T<bool>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.IsTomorrowResource>]
+            "isYesterday" => T<unit> ^-> T<bool>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.IsYesterdayResource>]
             // i18n
-            "locale" => T<string> ^-> TSelf // TODO
-            "localeData" => T<unit> ^-> TSelf
-            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
-            "firstDayOfWeek" => T<unit> ^-> !| T<string>
-            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
+            // "locale" => T<string> ^-> TSelf // TODO
+            // "localeData" => T<unit> ^-> TSelf
+            // |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
+            // "firstDayOfWeek" => T<unit> ^-> !| T<string>
+            // |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
             "months" => T<unit> ^-> !| T<string>
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
             "monthsShort" => T<unit> ^-> !| T<string>
@@ -297,8 +323,6 @@ module Definition =
                 StartOfUnits
                 UTC
                 Inclusivity
-                StaticLocaleData
-                InstanceLocaleData
                 DayJs
             ]
         ]
