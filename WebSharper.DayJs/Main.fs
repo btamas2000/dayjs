@@ -6,6 +6,167 @@ open WebSharper.InterfaceGenerator
 
 module Definition =
 
+    let Locale =
+        Class "Locale"
+
+    let mutable Resources : CodeModel.NamespaceEntity list = []
+
+    let LocaleSetup (s: string) = 
+        let r =
+            Resource (s.ToUpperInvariant() + "CDN") (sprintf "https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/locale/%s.min.js" s)
+        
+        Resources <- List.append Resources [r]
+
+        (s.ToUpperInvariant()) =? TSelf
+        |> Requires [r]
+        |> WithGetterInline (sprintf "'%s'" s)
+
+    let localeStrings =
+        [
+            "af"
+            "am"
+            "ar-dz"
+            "ar-kw"
+            "ar-ly"
+            "ar-ma"
+            "ar-sa"
+            "ar-tn"
+            "ar"
+            "az"
+            "be"
+            "bg"
+            "bi"
+            "bm"
+            "bn"
+            "bo"
+            "br"
+            "bs"
+            "ca"
+            "cs"
+            "cv"
+            "cy"
+            "da"
+            "de-at"
+            "de-ch"
+            "de"
+            "dv"
+            "el"
+            "en-au"
+            "en-ca"
+            "en-gb"
+            "en-ie"
+            "en-il"
+            "en-in"
+            "en-nz"
+            "en-sg"
+            "en-tt"
+            "en"
+            "eo"
+            "es-do"
+            "es-pr"
+            "es-us"
+            "es"
+            "et"
+            "eu"
+            "fa"
+            "fi"
+            "fo"
+            "fr-ca"
+            "fr-ch"
+            "fr"
+            "fy"
+            "ga"
+            "gd"
+            "gl"
+            "gu"
+            "he"
+            "hi"
+            "hr"
+            "ht"
+            "hu"
+            "hy-am"
+            "id"
+            "is"
+            "it-ch"
+            "it"
+            "ja"
+            "jv"
+            "ka"
+            "kk"
+            "km"
+            "kn"
+            "ko"
+            "ku"
+            "ky"
+            "lb"
+            "lo"
+            "lt"
+            "lv"
+            "me"
+            "mi"
+            "mk"
+            "ml"
+            "mn"
+            "mr"
+            "ms-my"
+            "ms"
+            "mt"
+            "my"
+            "nb"
+            "ne"
+            "nl-be"
+            "nl"
+            "nn"
+            "oc-lnc"
+            "pa-in"
+            "pl"
+            "pt-br"
+            "pt"
+            "ro"
+            "ru"
+            "rw"
+            "sd"
+            "se"
+            "si"
+            "sk"
+            "sl"
+            "sq"
+            "sr-cyrl"
+            "sr"
+            "ss"
+            "sv-fi"
+            "sv"
+            "sw"
+            "ta"
+            "te"
+            "tet"
+            "tg"
+            "th"
+            "tk"
+            "tl-ph"
+            "tlh"
+            "tr"
+            "tzl"
+            "tzm-latn"
+            "tzm"
+            "ug-cn"
+            "uk"
+            "ur"
+            "uz-latn"
+            "uz"
+            "vi"
+            "x-pseudo"
+            "yo"
+            "zh-cn"
+            "zh-hk"
+            "zh-tw"
+            "zh"
+        ]
+
+    Locale
+    |+> Static (localeStrings |> List.map (fun x -> LocaleSetup x :> CodeModel.IClassMember))
+    |> ignore
+
     let FromStandardObject =
         Pattern.Config "FromStandardObject" {
             Required = []
@@ -59,24 +220,24 @@ module Definition =
             "second"
         ]
 
-    let UTC =
-        Class "dayjs.utc"
-        |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.UTCResource>]
-        |> WithSourceName "UTC"
-        |+> Static [
-            Constructor T<unit>
-            Constructor T<bool>
-        ]
-        |+> Instance [
-            "local" => T<unit> ^-> TSelf
-        ]
-
     let Inclusivity =
         Pattern.EnumInlines "Inclusivity" [
             "InclIncl", "'[]'"
             "InclExl", "'[)'"
             "ExlIncl", "'(]'"
             "ExlExl", "'()'"
+        ]
+
+    let DurationUnits =
+        Pattern.EnumStrings "DurationUnits" [
+            "days"
+            "weeks"
+            "months"
+            "years"
+            "hours"
+            "minutes"
+            "seconds"
+            "milliseconds"
         ]
 
     let DayJs =
@@ -95,9 +256,19 @@ module Definition =
             Constructor FromStandardObject
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.ObjectSupportResource>]
             Constructor (!| T<int>)
-            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.ArraySupportResource>]    
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.ArraySupportResource>]
+            Constructor TSelf
 
             "clone" => T<unit> ^-> TSelf
+            "utc" => !? T<bool> ^-> TSelf
+            |> WithSourceName "StaticUTC"
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.UTCResource>]
+            "local" => T<unit> ^-> TSelf
+            |> WithSourceName "StaticLocal"
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.UTCResource>]
+            "isUTC" => T<unit> ^-> T<bool>
+            |> WithSourceName "StaticIsUTC"
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.UTCResource>]
             "unix" => (T<int> + T<float>) ^-> TSelf
             "min" => !| TSelf ^-> TSelf
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.MinMaxResource>]
@@ -105,20 +276,31 @@ module Definition =
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.MinMaxResource>]
             "isDayjs" => T<obj> ^-> T<bool>
             "locale" => T<unit> ^-> T<string>
-            "locale" => T<string> ^-> TSelf // TODO
+            |> WithSourceName "GlobalLocale"
+            "locale" => Locale ^-> TSelf
+            |> WithSourceName "GlobalLocale"
+            "locale" => T<string> * T<obj> ^-> TSelf
+            |> WithSourceName "NewLocale"
             "localeData" => T<unit> ^-> TSelf
+            |> WithSourceName "GlobalLocaleData"
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
             "firstDayOfWeek" => T<unit> ^-> !| T<string>
+            |> WithSourceName "GlobalFirstDayOfWeek"
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
-            "months" => TSelf ^-> !| T<string>
+            "months" => !? TSelf ^-> !| T<string>
+            |> WithSourceName "GlobalMonths"
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
-            "monthsShort" => TSelf ^-> !| T<string>
+            "monthsShort" => !? TSelf ^-> !| T<string>
+            |> WithSourceName "GlobalMonthsShort"
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
-            "weekdays" => TSelf ^-> !| T<string>
+            "weekdays" => !? TSelf ^-> !| T<string>
+            |> WithSourceName "GlobalWeekdays"
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
-            "weekdaysShort" => TSelf ^-> !| T<string>
+            "weekdaysShort" => !? TSelf ^-> !| T<string>
+            |> WithSourceName "GlobalWeekdaysShort"
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
-            "weekdaysMin" => TSelf ^-> !| T<string>
+            "weekdaysMin" => !? TSelf ^-> !| T<string>
+            |> WithSourceName "GlobalWeekdaysMin"
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
             "tz" => T<string> * T<string> ^-> TSelf
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.TimeZoneResource>]
@@ -127,10 +309,37 @@ module Definition =
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.CustomParseFormatResource>]
             "updateLocale" => T<string> * T<obj> ^-> TSelf
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.UpdateLocaleResource>]
+            "tz" => T<string> * T<string> ^-> TSelf
+            |> WithSourceName "StaticTZ"
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.TimeZoneResource>]
+            "tz" => (T<string> * (T<string> + !| T<string>) * !? T<bool>) ^-> TSelf
+            |> WithSourceName "StaticTZParse"
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.CustomParseFormatResource>]
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.TimeZoneResource>]
+            "tz" => (T<string> * (T<string> + !| T<string>) * T<string> * !? T<bool>) ^-> TSelf
+            |> WithSourceName "StaticTZParse"
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.CustomParseFormatResource>]
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.TimeZoneResource>]
+            "tz.guess" => T<unit> ^-> T<string>
+            |> WithSourceName "Guess"
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.TimeZoneResource>]
+            "tz.setDefault" => !? T<string> ^-> TSelf
+            |> WithSourceName "SetDefaultTZ"
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.TimeZoneResource>]
+            "duration" => !? T<int> ^-> TSelf
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.DurationResource>]
+            "duration" => T<int> * DurationUnits ^-> TSelf
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.DurationResource>]
         ]
         |+> Instance [
             "isValid" => T<unit> ^-> T<bool>
             "valueOf" => T<unit> ^-> T<int>
+            "utc" => !? T<bool> ^-> TSelf
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.UTCResource>]
+            "local" => T<unit> ^-> TSelf
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.UTCResource>]
+            "isUTC" => T<unit> ^-> T<bool>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.UTCResource>]
             // get set
             "millisecond" => T<unit> ^-> T<int>
             "millisecond" => T<int> ^-> T<unit>
@@ -234,13 +443,20 @@ module Definition =
             "add" => FromStandardObject ^-> TSelf
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.DurationResource>]
             "subtract" => T<int> * AddSubtractUnits ^-> TSelf
+            "subtract" => FromStandardObject ^-> TSelf
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.ObjectSupportResource>]
             "startOf" => StartOfUnits ^-> TSelf
             "endOf" => StartOfUnits ^-> TSelf
             "utcOffset" => T<int> * !? T<bool> ^-> T<string>
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.UTCResource>]
             // display
             "format" => !? T<string> ^-> T<string>
-            //localizedformat TODO
+            "format" => T<string> ^-> T<string>
+            |> WithSourceName "LocalizedFormat"
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocalizedFormatResource>]
+            "format" => T<string> ^-> T<string>
+            |> WithSourceName "AdvancedFormat"
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.AdvancedFormatResource>]
             "fromNow" => !? T<bool> ^-> T<string>
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.RelativeTimeResource>]
             "from" => TSelf * !? T<bool> ^-> T<string>
@@ -282,11 +498,12 @@ module Definition =
             "isYesterday" => T<unit> ^-> T<bool>
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.IsYesterdayResource>]
             // i18n
-            // "locale" => T<string> ^-> TSelf // TODO
-            // "localeData" => T<unit> ^-> TSelf
-            // |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
-            // "firstDayOfWeek" => T<unit> ^-> !| T<string>
-            // |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
+            "locale" => Locale ^-> TSelf
+            |> WithSourceName "LocalLocale"
+            "localeData" => T<unit> ^-> TSelf
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
+            "firstDayOfWeek" => T<unit> ^-> !| T<string>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
             "months" => T<unit> ^-> !| T<string>
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
             "monthsShort" => T<unit> ^-> !| T<string>
@@ -297,32 +514,49 @@ module Definition =
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
             "weekdaysMin" => T<unit> ^-> !| T<string>
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.LocaleDataResource>]
-            // plugins
-            // customize
             // durations
+            "humanize" => !? T<bool> ^-> T<string>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.DurationResource>]
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.RelativeTimeResource>]
+            "format" => FromStandardObject ^-> T<string>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.DurationResource>]
+            "asMilliseconds" => T<unit> ^-> T<int>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.DurationResource>]
+            "asSeconds" => T<unit> ^-> T<int>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.DurationResource>]
+            "asMinutes" => T<unit> ^-> T<int>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.DurationResource>]
+            "asHours" => T<unit> ^-> T<int>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.DurationResource>]
+            "asDays" => T<unit> ^-> T<int>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.DurationResource>]
+            "asWeeks" => T<unit> ^-> T<int>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.DurationResource>]
+            "asMonths" => T<unit> ^-> T<int>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.DurationResource>]
+            "asYears" => T<unit> ^-> T<int>
+            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.DurationResource>]
+            "as" => DurationUnits ^-> T<int>
+            "get" => DurationUnits ^-> T<int>
+            "isDuration" => T<unit> ^-> T<bool>
             // timezone
             "tz" => T<string> * !? T<bool> ^-> TSelf
-            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.TimeZoneResource>]
-            "guess" => T<unit> ^-> T<string>
-            |> WithInline "tz.guess()"
-            |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.TimeZoneResource>]
-            "tz.setDefault" => !? T<string> ^-> TSelf
             |> RequiresExternal [T<WebSharper.DayJs.Helpers.DayJsHelpers.TimeZoneResource>]
         ]
 
     let Assembly =
         Assembly [
-            // Namespace "WebSharper.DayJs.Resources" [
-            //     // DayJsResources.CustomParseFormatResource
-                
-            // ]
+            Namespace "WebSharper.DayJs.Resources" [
+                yield! Resources
+            ]
             Namespace "WebSharper.DayJs" [
+                Locale
                 FromStandardObject
                 GetSetUnits
                 AddSubtractUnits
                 StartOfUnits
-                UTC
                 Inclusivity
+                DurationUnits
                 DayJs
             ]
         ]

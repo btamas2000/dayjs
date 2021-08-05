@@ -272,3 +272,7 @@ module DayJsHelpers =
     [<Require(typeof<MainResource>)>]
     type UpdateLocaleResource() =
         inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/updateLocale.min.js")
+
+    [<Require(typeof<MainResource>)>]
+    type LocalizedFormatResource() =
+        inherit DayJsResource("https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/plugin/localizedFormat.min.js")
